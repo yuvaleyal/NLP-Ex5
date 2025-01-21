@@ -1,0 +1,3 @@
+PROPN = "PROPN"
+PUNCT = "PUNCT"
+VERB = "VERB"
