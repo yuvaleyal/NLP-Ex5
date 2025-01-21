@@ -7,9 +7,9 @@ import spacy
 import spacy.tokens
 from spacy.tokens.token import Token
 from spacy.tokens.doc import Doc
-from relation_structure import RelationStructure
 
-PROPN = "PROPN"
+from relation_structure import RelationStructure
+from utils import *
 
 def find_proper_noun_spans(text: Doc) -> list[tuple[int, int]]:
     """returns a list of tuples (start, end) that the range in the text in all proper nouns
@@ -52,6 +52,49 @@ def merge_proper_nouns(text: Doc) -> Doc:
             retokenizer.merge(text[start:end], attrs=attrs)
     return text            
 
+def has_a_verb(tokens: list[Token]) -> bool:
+    """checks if there is a verb in the given list of tokens
+
+    Args:
+        tokens (list[Token]): the given list of tokens
+
+    Returns:
+        bool: True if there is a verb, False otherwise
+    """
+    for token in tokens:
+        if token.pos_ == VERB:
+            return True
+    return False
+
+def realtion_caniadates(text: Doc) -> list[list[Token]]:
+    """returns a list of all the subsections of the text that might become a relation.
+    A subsection that might become a relation is a consecutive pair of proper nouns such that all the tokens between them are nonpunctuation and at least one of the tokens between them is a verb.
+
+    Args:
+        text (Doc): the given text
+
+    Returns:
+        list[list[Token]]: the list of potential relations
+    """
+    all_canidates = []
+    cur_canidate = []
+    for token in text:
+        if cur_canidate == []:
+            if token.pos_ == PROPN:
+                cur_canidate.append(token)
+        else:
+            if token.pos_ == PROPN:
+                if has_a_verb(cur_canidate):
+                    cur_canidate.append(token)
+                    all_canidates.append(cur_canidate)
+                cur_canidate = [token]
+            elif token.pos_ == PUNCT:
+                cur_canidate = []
+            else:
+                cur_canidate.append(token)
+    return all_canidates
+                        
+
 def extract(text: Doc) -> list[RelationStructure]:
     """extracts relations from the article
 
@@ -66,7 +109,8 @@ def extract(text: Doc) -> list[RelationStructure]:
     
 # hekp code to test because im not making another file    
 nlp = spacy.load("en_core_web_sm")    
-doc = nlp("Dan James really like David Bowie because Marry Jane told him")
+doc = nlp("Dan and James really likes David Bowie because Marry Jane likes David")
 print([token.text + " " + token.pos_ for token in doc])
 merge_proper_nouns(doc)
 print([token.text + " " + token.pos_ for token in doc])
+print(realtion_caniadates(doc))
