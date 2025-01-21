@@ -94,6 +94,11 @@ def realtion_caniadates(text: Doc) -> list[list[Token]]:
                 cur_canidate.append(token)
     return all_canidates
                         
+def make_relation(tokens: list[Token]) -> RelationStructure:
+    relation = [token.text for token in tokens if token.pos_ in {VERB, ADP}]
+    if relation == []:
+        return
+    return RelationStructure(tokens[0].text, " ".join(relation), tokens[-1].text)
 
 def extract(text: Doc) -> list[RelationStructure]:
     """extracts relations from the article
@@ -105,12 +110,21 @@ def extract(text: Doc) -> list[RelationStructure]:
         list[RelationStructure]: all relations found
     """
     propn_merged = merge_proper_nouns(text)
+    potentials_relations = realtion_caniadates(propn_merged)
+    relations = []
+    for rel in potentials_relations:
+        relations.append(make_relation(rel))
+    return relations
     
     
 # hekp code to test because im not making another file    
-nlp = spacy.load("en_core_web_sm")    
-doc = nlp("Dan and James really likes David Bowie because Marry Jane likes David")
-print([token.text + " " + token.pos_ for token in doc])
-merge_proper_nouns(doc)
-print([token.text + " " + token.pos_ for token in doc])
-print(realtion_caniadates(doc))
+if __name__ == "__main__":
+    nlp = spacy.load("en_core_web_sm")    
+    doc = nlp("Dan and James really likes David Bowie because Marry Jane likes David")
+    print([token.text + " " + token.pos_ for token in doc])
+    merge_proper_nouns(doc)
+    print([token.text + " " + token.pos_ for token in doc])
+    l = realtion_caniadates(doc)
+    print (l)
+    for n in l:
+        print(make_relation(n))
