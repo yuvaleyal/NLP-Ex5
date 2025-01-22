@@ -18,7 +18,7 @@ class CompoundPROPN:
     
     def __str__(self):
         # Get original text
-        all_propns = set({self.head}.union(self.children))
+        all_propns = {self.head}.union(self.children)
         ordered_propns = sorted(all_propns, key=lambda x: x.i)
         return " ".join([token.text for token in ordered_propns])
 
