@@ -65,7 +65,7 @@ def conditional_relation(h1: Token, h2: Token) -> None | tuple[Token]:
         Condition 2: h1’s parent in the dependency tree (denoted with h)
         is the same as h2’s grandparent (denote h2’s parent with h'),
         the edge (h, h1) is labeled nsubj (nominal subject),
-        the edge (h, h0) is labeled prep (preposition),
+        the edge (h, h') is labeled prep (preposition),
         and the edge (h', h2) is labeled pobj (prepositional object).
     """
     # In the case condition #1 holds, the Relation is defined to be h.
@@ -77,6 +77,7 @@ def conditional_relation(h1: Token, h2: Token) -> None | tuple[Token]:
     # Condition 2
     if h1.head == h2.head.head and h1.dep_ == NSUBJ_RELATION \
         and h1.head.dep_ == PREP_RELATION and h2.dep_ == POBJ_RELATION:
+        print("Preposition detected:", h1.head, h2.head)
         return (h1.head, h2.head)
 
 
@@ -93,7 +94,7 @@ def extract_relations(text: Doc, proper_nouns: list[CompoundPROPN]) -> list[Rela
     pnoun_relations: list[RelationStructure] = []
     for i, h1 in enumerate(proper_nouns):
         for j, h2 in enumerate(proper_nouns[i+1:]):
-            if relation := conditional_relation(h1, h2):
+            if relation := conditional_relation(h1.get_head(), h2.get_head()):
                 relation = " ".join([token.text for token in relation])
                 pnoun_relations.append(RelationStructure(str(h1), relation, str(h2)))
     
