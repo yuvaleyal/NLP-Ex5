@@ -11,8 +11,11 @@ from spacy.tokens.token import Token
 from spacy.tokens.doc import Doc
 
 from relation_structure import RelationStructure
+from compound_propn import CompoundPROPN
 from pos import *
 from relations import *
+
+
 
 
 def get_proper_noun_heads(text: Doc) -> list[Token]:
@@ -26,55 +29,34 @@ def get_proper_noun_heads(text: Doc) -> list[Token]:
     """
     return [token for token in text if token.pos_ == PROPN and token.dep_ != COMPOUND_RELATION]
 
-def get_compound_proper_nouns(text: Doc) -> list[set[Token]]:
+def get_compound_proper_nouns(text: Doc) -> list[CompoundPROPN]:
     """returns all proper nouns in the text
 
     Args:
         text (Doc): the given text
 
     Returns:
-        list[set]: the list of proper nouns sets
+        list[CompoundPROPN]: the list of compound proper nouns
     """
     proper_noun_heads = get_proper_noun_heads(text)
-    proper_nouns: list[set] = []
+    proper_nouns: list[CompoundPROPN] = []
     for head in proper_noun_heads:
-        proper_noun = {head}
+        children = set()
         for child in head.children:
             if child.dep_ == COMPOUND_RELATION:
-                proper_noun.add(child)
-        proper_nouns.append(proper_noun)
+                children.add(child)
+        proper_nouns.append(CompoundPROPN(head, children))
     return proper_nouns
 
-def should_be_extracted(h1: Token, h2: Token) -> bool:
-    """returns if the given pair of proper noun heads should be
-    extracted as a relation, based on whether they follow the conditions
+def conditional_relation(h1: Token, h2: Token) -> None | tuple[Token]:
+    """Checks if the pair relation should be extracted, and if so, returns the relation
 
     Args:
         h1 (Token): The first proper noun head
         h2 (Token): The second proper noun head
 
     Returns:
-        bool: if the pair relation should be extracted
-    """
-    # Condition 1
-    if h1.head == h2.head and h1.dep_ == NSUBJ_RELATION and h2.dep_ == DOBJ_RELATION:
-        return True
-    # Condition 2
-    if h1.head == h2.head.head and h1.dep_ == NSUBJ_RELATION \
-        and h1.head.dep_ == PREP_RELATION and h2.dep_ == POBJ_RELATION:
-        return True
-    return False
-
-
-def extract_relations(text: Doc, proper_nouns: list[set[Token]]) -> list[RelationStructure]:
-    """Extracts relations between PROPNs in the text if they follow the conditions
-
-    Args:
-        text (Doc): the given text
-        proper_nouns (list[set[Token]]): the list of proper nouns
-
-    Returns:
-        list[RelationStructure]: the list of relations as RelationStructure
+        None | tuple[Token]: None if the relation shouldn't be extracted, otherwise the relation
     
     Notes:
         Condition 1: h1 and h2 have the same head token h, the edge (h, h1) is labeled nsubj
@@ -86,6 +68,36 @@ def extract_relations(text: Doc, proper_nouns: list[set[Token]]) -> list[Relatio
         the edge (h, h0) is labeled prep (preposition),
         and the edge (h', h2) is labeled pobj (prepositional object).
     """
+    # In the case condition #1 holds, the Relation is defined to be h.
+    # In the case condition #2 holds, the Relation is defined to be the concatenation of h and h'.
+
+    # Condition 1
+    if h1.head == h2.head and h1.dep_ == NSUBJ_RELATION and h2.dep_ == DOBJ_RELATION:
+        return (h1.head,)
+    # Condition 2
+    if h1.head == h2.head.head and h1.dep_ == NSUBJ_RELATION \
+        and h1.head.dep_ == PREP_RELATION and h2.dep_ == POBJ_RELATION:
+        return (h1.head, h2.head)
+
+
+def extract_relations(text: Doc, proper_nouns: list[CompoundPROPN]) -> list[RelationStructure]:
+    """Extracts relations between PROPNs in the text if they follow the conditions
+
+    Args:
+        text (Doc): the given text
+        proper_nouns (list[set[Token]]): the list of compound proper nouns
+
+    Returns:
+        list[RelationStructure]: the list of relations as RelationStructure
+    """
+    pnoun_relations: list[RelationStructure] = []
+    for i, h1 in enumerate(proper_nouns):
+        for j, h2 in enumerate(proper_nouns[i+1:]):
+            if relation := conditional_relation(h1, h2):
+                relation = " ".join([token.text for token in relation])
+                pnoun_relations.append(RelationStructure(str(h1), relation, str(h2)))
+    
+    return pnoun_relations
 
 
 # Implement an extractor based on the dependency trees of the sentences in the document
@@ -117,4 +129,4 @@ def extract(text: Doc) -> list[RelationStructure]:
         # the edge (h, h1) is labeled nsubj (nominal subject),
         # the edge (h, h0) is labeled prep (preposition),
         # and the edge (h', h2) is labeled pobj (prepositional object).
-    
+    return extract_relations(text, proper_nouns)
