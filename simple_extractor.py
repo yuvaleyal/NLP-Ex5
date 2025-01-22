@@ -9,7 +9,7 @@ from spacy.tokens.token import Token
 from spacy.tokens.doc import Doc
 
 from relation_structure import RelationStructure
-from utils import *
+from pos import *
 
 def find_proper_noun_spans(text: Doc) -> list[tuple[int, int]]:
     """returns a list of tuples (start, end) that the range in the text in all proper nouns
