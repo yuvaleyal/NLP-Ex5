@@ -93,7 +93,7 @@ def extract_relations(text: Doc, proper_nouns: list[CompoundPROPN]) -> list[Rela
     """
     pnoun_relations: list[RelationStructure] = []
     for i, h1 in enumerate(proper_nouns):
-        for j, h2 in enumerate(proper_nouns[i+1:]):
+        for j, h2 in enumerate(proper_nouns):
             if relation := conditional_relation(h1.get_head(), h2.get_head()):
                 relation = " ".join([token.text for token in relation])
                 pnoun_relations.append(RelationStructure(str(h1), relation, str(h2)))
