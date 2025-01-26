@@ -1,8 +1,10 @@
 import spacy.lang
+import spacy.tokens
 import wikipedia, spacy
 from simple_extractor import extract as simple_extract
 from complex_extractor import extract as complex_extract
 import numpy as np
+from typing import Callable
 
 def output_list_to_file(items: list, path: str):
     with open(path, "w") as f:
@@ -10,7 +12,40 @@ def output_list_to_file(items: list, path: str):
             f.write(item.__str__())
             f.write("\n")
 
-def evaluate_extractors(nlp: spacy.language.Language):
+
+def evaluate_extractions(nlp: spacy.language.Language,
+                         extractor_functions: list[Callable[[spacy.tokens.Doc], list[str]]],
+                         extractor_names: list[str],
+                         num_samples: int = 5,
+                         wikipedia_titles: list[str] = ("Bradley Pitt", "Donald Trump", "J.K. Rowling")):
+    """Evaluate the extractors by:
+    Sampling `num_samples` relations from each page, and manually checking if they are correct.
+
+    Args:
+        nlp (spacy.language.Language): the spacy language object
+        extractor_functions (list[Callable]): list of extractor functions, accepting a spacy doc and returning a list of relations
+        extractor_names (list[str]): list of extractor names
+        num_samples (int, optional): number of relations samples. Defaults to 5.
+        wikipedia_titles (list[str], optional): wikipedia pages to use. Defaults to ("Bradley Pitt", "Donald Trump", "J.K. Rowling").
+    """
+    if len(extractor_functions) != len(extractor_names):
+        raise ValueError("extractor_functions and extractor_names must have the same length.")
+
+    pages = wikipedia_titles
+    for page in pages:
+        print(f"Page: {page}")
+        page_content = wikipedia.page(title=page).content
+        analyzed_page = nlp(page_content)
+        for extractor, extractor_name in zip(extractor_functions, extractor_names):
+            print(f"\n{extractor_name}:")
+            relations = extractor(analyzed_page)
+            sample = np.random.choice(relations, num_samples, replace=False)
+            for relation in sample:
+                print(relation)
+        print("\n")
+
+
+def evaluate_simple_and_complex_extractors(nlp: spacy.language.Language):
     """For each extractor (simple and complex),
     evaluate the extractor on the wikipedia page of:
     1. Bradley Pitt
@@ -23,24 +58,9 @@ def evaluate_extractors(nlp: spacy.language.Language):
     Args:
         nlp: spacy Language object
     """
-    pages = ["Bradley Pitt", "Donald Trump", "J.K. Rowling"]
-    num_samples = 5
-
-    for page in pages:
-        print(f"Page: {page}")
-        page_content = wikipedia.page(title=page).content
-        analyzed_page = nlp(page_content)
-        simple_relations = simple_extract(analyzed_page)
-        complex_relations = complex_extract(analyzed_page)
-        print("Simple Extractor:")
-        simple_sample = np.random.choice(simple_relations, num_samples, replace=False)
-        for relation in simple_sample:
-            print(relation)
-        print("\nComplex Extractor:")
-        complex_sample = np.random.choice(complex_relations, num_samples, replace=False)
-        for relation in complex_sample:
-            print(relation)
-        print("\n")
+    extractors = [simple_extract, complex_extract]
+    extractor_names = ["Simple Extractor", "Complex Extractor"]
+    evaluate_extractions(nlp, extractors, extractor_names)
 
 
 if __name__ == "__main__":
@@ -53,7 +73,7 @@ if __name__ == "__main__":
     # # output_list_to_file(relations, "output.txt")
     # relations = complex_extract(analyzed_page)
     # output_list_to_file(relations, "output_complex_trump.txt")
-    evaluate_extractors(nlp)
+    evaluate_simple_and_complex_extractors(nlp)
 
     
     
