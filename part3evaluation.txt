@@ -1,0 +1,46 @@
+Page: Bradley Pitt
+Simple Extractor:
+Babel received Academy
+Pitt starred Julia Roberts
+Graham King ruled for Oscar
+Cannes Film Festival featured at Toronto International Film Festival
+True Romance as named Floyd
+
+Complex Extractor:
+Pitt starred Cate Blanchett
+Pitt portrayed Tyler Durden
+Pitt met actress Jennifer Aniston
+Pitt described Springfield
+Pitt portrayed Vampire Chronicles
+
+
+Page: Donald Trump
+Simple Extractor:
+Texas asked overturn in won by Biden
+Trump asked discuss investigating Biden
+Scott Pruitt resigned in Secretary
+Trump pressured Zelenskyy
+Atlantic City Hilton Hotel renamed Trump Castle
+
+Complex Extractor:
+TMTG launched Truth Social
+= opened Harrah
+= Trump established White House Coronavirus Task Force
+Trump withdrew U.S.
+Trump cofounded Trump University
+
+
+Page: J.K. Rowling
+Simple Extractor:
+Christian found in Rowling
+Rowling said writing Harry Potter
+Lumos worked with of Kyiv
+Children = =
+Dumbledore released in April
+
+Complex Extractor:
+Robert Galbraith == left Christopher Little Literary Agency
+Brown published Calling
+John Nettleship described Anne
+Stone introduces Harry Potter
+Bloomsbury published Stone
