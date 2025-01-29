@@ -14,8 +14,11 @@ def LLM_respeonse(text: Doc):
     response = model.generate_content(prompt)
     return response.text.split("\n")
 
+def remove_brackets(text: str) -> str:
+    return text.replace("[", "").replace("]", "")
+
 def triplet_to_relation(triplet: str) -> RelationStructure:
-    triplet = triplet[1:-1]
+    triplet = remove_brackets(triplet)
     try:
         subject, relation, obj = triplet.split(SEPERATOR)
     except ValueError:
