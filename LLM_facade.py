@@ -3,8 +3,9 @@ import spacy
 import wikipedia
 from spacy.tokens.doc import Doc
 from relation_structure import RelationStructure
+SEPERATOR = " SEP "
 KEY = "AIzaSyC92XWZEYYG0bAsp5KlfDZrMGdAaKPl9QE"
-PROMPT_PERFIX = "read the following text end extracts triplets of (Subject, Relation,Object), where each of them is a span of text. The Subject and Object slot fillers are names (proper nouns), and the Relation slot filler is a verb or a verb along with a preposition. Return only the relations you find, each in a seperate line and formatted as follows: [Subject, Relation, Object]. The text is: "
+PROMPT_PERFIX = "read the following text end extracts triplets of (Subject, Relation,Object), where each of them is a span of text. The Subject and Object slot fillers are names (proper nouns), and the Relation slot filler is a verb or a verb along with a preposition. Return only the relations you find, each in a seperate line and formatted as follows: [Subject SEP Relation SEP Object]. The text is: "
 
 def LLM_respeonse(text: Doc):
     prompt = PROMPT_PERFIX + text.text
@@ -15,7 +16,10 @@ def LLM_respeonse(text: Doc):
 
 def triplet_to_relation(triplet: str) -> RelationStructure:
     triplet = triplet[1:-1]
-    subject, relation, obj = triplet.split(", ")
+    try:
+        subject, relation, obj = triplet.split(SEPERATOR)
+    except ValueError:
+        return
     return RelationStructure(subject, relation, obj)
 
 def LLM_relations(text: Doc) -> list[RelationStructure]:
