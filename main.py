@@ -3,6 +3,7 @@ import spacy.tokens
 import wikipedia, spacy
 from simple_extractor import extract as simple_extract
 from complex_extractor import extract as complex_extract
+from LLM_facade import LLM_relations as LLM_extract
 import numpy as np
 from typing import Callable
 
@@ -13,7 +14,7 @@ def output_list_to_file(items: list, path: str):
             f.write("\n")
 
 
-def evaluate_extractions(nlp: spacy.language.Language,
+def extract_relations(nlp: spacy.language.Language,
                          extractor_functions: list[Callable[[spacy.tokens.Doc], list[str]]],
                          extractor_names: list[str],
                          num_samples: int = 5,
@@ -45,8 +46,8 @@ def evaluate_extractions(nlp: spacy.language.Language,
         print("\n")
 
 
-def evaluate_simple_and_complex_extractors(nlp: spacy.language.Language):
-    """For each extractor (simple and complex),
+def evaluate_extractors(nlp: spacy.language.Language):
+    """For each extractor (simple, complex, LLM),
     evaluate the extractor on the wikipedia page of:
     1. Bradley Pitt
     2. Donald Trump
@@ -58,9 +59,9 @@ def evaluate_simple_and_complex_extractors(nlp: spacy.language.Language):
     Args:
         nlp: spacy Language object
     """
-    extractors = [simple_extract, complex_extract]
-    extractor_names = ["Simple Extractor", "Complex Extractor"]
-    evaluate_extractions(nlp, extractors, extractor_names)
+    extractors = [simple_extract, complex_extract, LLM_extract]
+    extractor_names = ["Simple Extractor", "Complex Extractor", "LLM Extractor"]
+    extract_relations(nlp, extractors, extractor_names)
 
 
 if __name__ == "__main__":
@@ -73,7 +74,7 @@ if __name__ == "__main__":
     # # output_list_to_file(relations, "output.txt")
     # relations = complex_extract(analyzed_page)
     # output_list_to_file(relations, "output_complex_trump.txt")
-    evaluate_simple_and_complex_extractors(nlp)
+    evaluate_extractors(nlp)
 
     
     
