@@ -5,7 +5,6 @@ from spacy.tokens.doc import Doc
 from relation_structure import RelationStructure
 SEPERATOR = " SEP "
 KEY = "AIzaSyC92XWZEYYG0bAsp5KlfDZrMGdAaKPl9QE"
-#PROMPT_PREFIX = "read the following text end extracts triplets of (Subject, Relation,Object), where each of them is a span of text. The Subject and Object slot fillers are names (proper nouns), and the Relation slot filler is a verb or a verb along with a preposition. Return only the relations you find, each in a seperate line and formatted as follows: [Subject SEP Relation SEP Object]. make sure to include all relevant information in the relation, as long as following the template. for example, in the sentence \'Dave likes Harry Potter\', return [Dave SEP likes SEP Harry Potter], not [Dave SEP likes SEP Harry]. The text is: "
 PROMPT_PREFIX = (
     "Extract triplets from the given text in the format: [Subject SEP Relation SEP Object]. "
     "Follow these rules:\n"

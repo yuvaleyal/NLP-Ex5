@@ -66,14 +66,6 @@ def evaluate_extractors(nlp: spacy.language.Language):
 
 if __name__ == "__main__":
     nlp = spacy.load("en_core_web_sm")
-    # page = wikipedia.page(title="Bradley Pitt").content
-    # page = wikipedia.page(title="Donald Trump").content
-    # analyzed_page = nlp(page)
-    # # relations = simple_extract(analyzed_page)
-    # # print(relations[0])
-    # # output_list_to_file(relations, "output.txt")
-    # relations = complex_extract(analyzed_page)
-    # output_list_to_file(relations, "output_complex_trump.txt")
     evaluate_extractors(nlp)
 
     

@@ -116,15 +116,3 @@ def extract(text: Doc) -> list[RelationStructure]:
         relations.append(make_relation(rel))
     return relations
     
-    
-# hekp code to test because im not making another file    
-if __name__ == "__main__":
-    nlp = spacy.load("en_core_web_sm")    
-    doc = nlp("Dan and James really likes David Bowie because Marry Jane likes David")
-    print([token.text + " " + token.pos_ for token in doc])
-    merge_proper_nouns(doc)
-    print([token.text + " " + token.pos_ for token in doc])
-    l = realtion_caniadates(doc)
-    print (l)
-    for n in l:
-        print(make_relation(n))
