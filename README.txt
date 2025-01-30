@@ -1,26 +1,26 @@
 code output with manual evaluation:
-Page: Bradley Pitt
+Page: Ruth Bader Ginsburg
 
-Simple Extractor found 122 relations, including:
-(Jolie, spent in in, Nice) - Wrong
-(Pitt, cast as, Billy Canton) - Correct
-(Pitt, of acting works to, heartthrob) - Wrong
-(Pitt, diagnosed with, prosopagnosia) - Correct
-(Plan B Entertainment, produced, Departed) - Correct
+Simple Extractor found 172 relations, including:
+(Ginsburg, guaranteeing provide with, Ginsburg) - Wrong
+(Ginsburg, reasoned, Oneida) - Wrong
+(New York, to came from, Kraków) - Wrong
+(Strate, used in, Plains Commerce Bank) - Wrong
+(Ginsburg, found of by, Texas) - Wrong
 
-Complex Extractor found 18 relations, including:
-(Pitt, established, Jolie Pitt Foundation) - Correct
-(Pitt, portrayed, Dr. Anthony Fauci) - Correct
-(company Plan B Entertainment, produced, Departed) - Correct
-(Pitt, portrayed, vampire Louis de Pointe du Lac) - Correct
-(Pitt, accompanied, Jolie) - Correct
+Complex Extractor found 20 relations, including:
+(Court, split, 5–4) - Correct
+(candidate Hillary Clinton, beat, candidate Donald Trump) - Wrong
+(= U.S. Court, passed, Omnibus Judgeship Act) - Correct
+(Kate McKinnon, portrayed, Ginsburg) - Correct
+(Congress, passed, Omnibus Judgeship Act) - Correct
 
-LLM Extractor found 102 relations, including:
-(Brad Pitt, was involved with, Juliette Lewis) - Correct
-(Brad Pitt, played, Tom Bishop) - Correct
-(Brad Pitt, was involved with, Shalane McCall) - Correct
-(Brad Pitt, narrated, Rx for Survival) - Correct
-(ACNielsen, found, Brad Pitt) - Wrong
+LLM Extractor found 165 relations, including:
+(Lilly Ledbetter, sued, Goodyear) - Correct
+(Gerald Gunther, pushed, Judge Edmund L. Palmieri) - Wrong
+(Ruth Bader Ginsburg, won, gender discrimination cases) - Correct
+(Ginsburg, returned, Supreme) - Wrong
+(Janet Reno, recommended, Ginsburg) - Correct
 
 
 Page: Donald Trump
@@ -70,6 +70,6 @@ LLM Extractor found 80 relations, including:
 (Joanne Rowling, has received, OBE) - Correct
 (Joanne Rowling, worked for, Amnesty International) - Correct
 
-Simple - 4 Wrongs
-Complex - 1 Wrong
-LLM - 2 Wrongs
+Simple - 7 Wrongs
+Complex - 2 Wrong
+LLM - 3 Wrongs
