@@ -38,8 +38,8 @@ def extract_relations(nlp: spacy.language.Language,
         page_content = wikipedia.page(title=page).content
         analyzed_page = nlp(page_content)
         for extractor, extractor_name in zip(extractor_functions, extractor_names):
-            print(f"\n{extractor_name}:")
             relations = extractor(analyzed_page)
+            print(f"\n{extractor_name} found {len(relations)} relations, including:")
             sample = np.random.choice(relations, num_samples, replace=False)
             for relation in sample:
                 print(relation)
