@@ -6,4 +6,4 @@ class RelationStructure:
     relative: str
     
     def __str__(self):
-        return f"{self.subject} {self.relation} {self.relative}"
+        return f"({self.subject}, {self.relation}, {self.relative})"
