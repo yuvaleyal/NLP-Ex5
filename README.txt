@@ -33,7 +33,7 @@ Simple Extractor found 203 relations, including:
 (Trump, posted on, Twitter) - Correct
 
 Complex Extractor found 30 relations, including:
-(Colorado Supreme Court, ruled, Trump)
+(Colorado Supreme Court, ruled, Trump) - Correct
 (Trump, purchased, Eastern Air Lines Shuttle) - Correct
 (Trump, opened, Harrah) - Correct
 (Trump, criticized, WHO) - Correct
@@ -69,3 +69,7 @@ LLM Extractor found 80 relations, including:
 (Joanne Rowling, was inspired by, Lucy Shepherd) - Correct
 (Joanne Rowling, has received, OBE) - Correct
 (Joanne Rowling, worked for, Amnesty International) - Correct
+
+Simple - 4 Wrongs
+Complex - 1 Wrong
+LLM - 2 Wrongs
