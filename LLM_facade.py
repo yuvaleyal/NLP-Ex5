@@ -5,7 +5,16 @@ from spacy.tokens.doc import Doc
 from relation_structure import RelationStructure
 SEPERATOR = " SEP "
 KEY = "AIzaSyC92XWZEYYG0bAsp5KlfDZrMGdAaKPl9QE"
-PROMPT_PERFIX = "read the following text end extracts triplets of (Subject, Relation,Object), where each of them is a span of text. The Subject and Object slot fillers are names (proper nouns), and the Relation slot filler is a verb or a verb along with a preposition. Return only the relations you find, each in a seperate line and formatted as follows: [Subject SEP Relation SEP Object]. The text is: "
+#PROMPT_PREFIX = "read the following text end extracts triplets of (Subject, Relation,Object), where each of them is a span of text. The Subject and Object slot fillers are names (proper nouns), and the Relation slot filler is a verb or a verb along with a preposition. Return only the relations you find, each in a seperate line and formatted as follows: [Subject SEP Relation SEP Object]. make sure to include all relevant information in the relation, as long as following the template. for example, in the sentence \'Dave likes Harry Potter\', return [Dave SEP likes SEP Harry Potter], not [Dave SEP likes SEP Harry]. The text is: "
+PROMPT_PREFIX = (
+    "Extract triplets from the given text in the format: [Subject SEP Relation SEP Object]. "
+    "Follow these rules:\n"
+    "- The Subject and Object must be names (proper nouns).\n"
+    "- The Relation must be a verb or a verb with a preposition.\n"
+    "- Ensure the extracted triplets accurately reflect relationships explicitly stated in the text.\n"
+    "Return each triplet on a new line in the specified format."
+)
+
 
 def LLM_respeonse(text: Doc) -> list[str]:
     """send the text to the LLM model and return the response
@@ -16,7 +25,7 @@ def LLM_respeonse(text: Doc) -> list[str]:
     Returns:
         list[str]: LLM response, split between relations
     """
-    prompt = PROMPT_PERFIX + text.text
+    prompt = PROMPT_PREFIX + text.text
     genai.configure(api_key=KEY)
     model = genai.GenerativeModel("gemini-1.5-flash")
     response = model.generate_content(prompt)
