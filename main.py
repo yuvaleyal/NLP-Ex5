@@ -18,7 +18,7 @@ def extract_relations(nlp: spacy.language.Language,
                          extractor_functions: list[Callable[[spacy.tokens.Doc], list[str]]],
                          extractor_names: list[str],
                          num_samples: int = 5,
-                         wikipedia_titles: list[str] = ("Bradley Pitt", "Donald Trump", "J.K. Rowling")):
+                         wikipedia_titles: list[str] = ("Ruth Bader Ginsburg", "Donald Trump", "J.K. Rowling")):
     """Evaluate the extractors by:
     Sampling `num_samples` relations from each page, and manually checking if they are correct.
 
@@ -27,7 +27,7 @@ def extract_relations(nlp: spacy.language.Language,
         extractor_functions (list[Callable]): list of extractor functions, accepting a spacy doc and returning a list of relations
         extractor_names (list[str]): list of extractor names
         num_samples (int, optional): number of relations samples. Defaults to 5.
-        wikipedia_titles (list[str], optional): wikipedia pages to use. Defaults to ("Bradley Pitt", "Donald Trump", "J.K. Rowling").
+        wikipedia_titles (list[str], optional): wikipedia pages to use. Defaults to ("Ruth Bader Ginsburg", "Donald Trump", "J.K. Rowling").
     """
     if len(extractor_functions) != len(extractor_names):
         raise ValueError("extractor_functions and extractor_names must have the same length.")
@@ -49,7 +49,7 @@ def extract_relations(nlp: spacy.language.Language,
 def evaluate_extractors(nlp: spacy.language.Language):
     """For each extractor (simple, complex, LLM),
     evaluate the extractor on the wikipedia page of:
-    1. Bradley Pitt
+    1. Ruth Bader Ginsburg
     2. Donald Trump
     3. J.K. Rowling
 
